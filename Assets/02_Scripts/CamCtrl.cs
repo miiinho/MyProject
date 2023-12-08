@@ -9,13 +9,19 @@ public class CamCtrl : MonoBehaviour
     private float mx;
     private float my;
 
+    public Transform player;
+
     void Start()
     {
         transform.eulerAngles = Vector3.zero;
+
+        player = GameObject.FindWithTag("Player").GetComponent<Transform>();
     }
 
     void Update()
     {
+        transform.position = player.position + new Vector3(0, 0, 0.5f);
+
         float h = Input.GetAxis("Mouse X");
         float v = Input.GetAxis("Mouse Y");
 
