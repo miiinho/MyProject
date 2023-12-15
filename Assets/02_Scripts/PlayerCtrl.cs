@@ -7,13 +7,21 @@ public class PlayerCtrl : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float rotSpeed = 10f;
+    public float gravity = 9.8f;
+
+    private Vector3 velocity;
+    private bool isGrounded;
 
     private float xRotation;
     private float yRotation;
     private Camera cam;
 
+    private CharacterController characterController;
+
     void Start()
     {
+        characterController = GetComponent<CharacterController>();
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -25,6 +33,13 @@ public class PlayerCtrl : MonoBehaviour
 
     void Update()
     {
+        isGrounded = characterController.isGrounded;
+
+        if (isGrounded && velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+
         if (Input.GetKey(KeyCode.LeftShift))
         {
             moveSpeed = 15f;
@@ -45,16 +60,10 @@ public class PlayerCtrl : MonoBehaviour
 
         Vector3 moveVector = transform.forward * v + transform.right * h;
 
-        transform.position += moveVector.normalized * moveSpeed * Time.deltaTime;
+        characterController.Move(moveVector * moveSpeed * Time.deltaTime);
 
-        //Vector3 dir = new Vector3(h, 0, v);
+        //transform.position += moveVector.normalized * moveSpeed * Time.deltaTime;
 
-
-        //if (!(h == 0 && v == 0))
-        //{
-        //    transform.position += dir * moveSpeed * Time.deltaTime;
-        //    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotSpeed);
-        //}
 
         float mouseX = Input.GetAxisRaw("Mouse X") * rotSpeed * Time.deltaTime;
         float mouseY = Input.GetAxisRaw("Mouse Y") * rotSpeed * Time.deltaTime;
@@ -66,5 +75,8 @@ public class PlayerCtrl : MonoBehaviour
 
         cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         transform.rotation = Quaternion.Euler(0, yRotation, 0);
+
+        velocity.y -= gravity * Time.deltaTime;
+        characterController.Move(velocity * Time.deltaTime);
     }
 }
