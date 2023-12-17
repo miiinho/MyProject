@@ -10,6 +10,9 @@ public class EnemyCtrl : MonoBehaviour
     public float patrolRadius = 10f;
     public float patrolInterval = 5f;
 
+    public GameObject[] enemySkins;
+    private int random;
+
     public enum State {Idle, Found, Chase, Attack, Damaged, Dead};
     State state = State.Idle;
 
@@ -30,6 +33,17 @@ public class EnemyCtrl : MonoBehaviour
             {
                 StartCoroutine(Patrol());
             }
+        }
+
+        random = Random.Range(0, 2);
+        if (random == 0)
+        {
+            enemySkins[0].gameObject.SetActive(true);
+        }
+
+        else
+        {
+            enemySkins[1].gameObject.SetActive(true);
         }
     }
 
@@ -100,6 +114,8 @@ public class EnemyCtrl : MonoBehaviour
         nma.SetDestination(finaPosition);
 
         yield return new WaitForSeconds(patrolInterval);
+
+        // idle 애니메이션으로 주변 시야체크 후 다시 패트롤
 
         StartCoroutine(Patrol());
     }
