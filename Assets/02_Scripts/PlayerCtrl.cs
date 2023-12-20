@@ -62,9 +62,6 @@ public class PlayerCtrl : MonoBehaviour
 
         characterController.Move(moveVector * moveSpeed * Time.deltaTime);
 
-        //transform.position += moveVector.normalized * moveSpeed * Time.deltaTime;
-
-
         float mouseX = Input.GetAxisRaw("Mouse X") * rotSpeed * Time.deltaTime;
         float mouseY = Input.GetAxisRaw("Mouse Y") * rotSpeed * Time.deltaTime;
 
